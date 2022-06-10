@@ -26,5 +26,34 @@ router.get('/', async(req, res) => {
     res.render('products/list', {productos})
 });
 
+router.get('/delete/:id', async(req, res) => {
+    const { id } = req.params;
+    await pool.query('DELETE FROM products WHERE ID = ?', [id]);
+    //console.log(req.params.id)
+    res.redirect('/products')
+});
+
+router.get('/edit/:id', async(req, res) => {
+    const { id } = req.params;
+    const product = await pool.query('SELECT * FROM products WHERE ID = ?', [id]);
+    //console.log(product[0])
+    res.render('products/edit', {product: product[0]});
+});
+
+router.post('/edit/:id', async(req, res) => {
+    const { id } = req.params;
+    const { productname, description, price } = req.body;
+    const newProduct = {
+        productname,
+        description,
+        price
+    };
+    console.log(newProduct);
+    await pool.query('UPDATE products set ? WHERE id = ?', [newProduct, id]);
+    res.redirect('/products')
+    res.send('updated')
+
+});
+
 module.exports = router;
 
