@@ -2,13 +2,15 @@ const express = require('express');
 const pool = require('../database');
 const router = express.Router();
 
+const { isLoggedIn } = require('../lib/auth');
+
 require('../database');
 
-router.get('/add', (req, res) => {
+router.get('/add', isLoggedIn, (req, res) => {
     res.render('products/add');
 });
 
-router.post('/add', async(req, res) => {
+router.post('/add', isLoggedIn, async(req, res) => {
     const { productname, description, price } = req.body;
 
     const newProduct = {
@@ -21,13 +23,13 @@ router.post('/add', async(req, res) => {
     res.redirect('/products');
 });
 
-router.get('/', async(req, res) => {
+router.get('/', isLoggedIn, async(req, res) => {
     const productos = await pool.query('SELECT * FROM products');
     console.log(productos)
     res.render('products/list', {productos})
 });
 
-router.get('/delete/:id', async(req, res) => {
+router.get('/delete/:id', isLoggedIn, async(req, res) => {
     const { id } = req.params;
     await pool.query('DELETE FROM products WHERE ID = ?', [id]);
     //console.log(req.params.id)
@@ -35,7 +37,7 @@ router.get('/delete/:id', async(req, res) => {
     res.redirect('/products')
 });
 
-router.get('/edit/:id', async(req, res) => {
+router.get('/edit/:id', isLoggedIn, async(req, res) => {
     const { id } = req.params;
     const product = await pool.query('SELECT * FROM products WHERE ID = ?', [id]);
     //console.log(product[0])
@@ -43,7 +45,7 @@ router.get('/edit/:id', async(req, res) => {
     res.render('products/edit', {product: product[0]});
 });
 
-router.post('/edit/:id', async(req, res) => {
+router.post('/edit/:id',isLoggedIn, async(req, res) => {
     const { id } = req.params;
     const { productname, description, price } = req.body;
     const newProduct = {

@@ -6,16 +6,21 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarScroll">
-      <ul class="navbar-nav ml-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+        {{#if user}}
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/products">Productos</a>
-        </li>
-        <li class="nav-item">
+          </li>
+          <li class="nav-item">
           <a class="nav-link" href="/products/add">Agregar Productos</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled">Link</a>
-        </li>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/profile">Perfil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/logout">Cerrar sesion</a>
+          </li>
+        {{/if}}
       </ul>
       <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
