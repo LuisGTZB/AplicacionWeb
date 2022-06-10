@@ -45,7 +45,7 @@ router.get('/profile', isLoggedIn, (req, res) => {
     res.render('profile');
 });
 
-router.get('/logout', (req, res) => {
+router.get('/logout',isLoggedIn, (req, res) => {
     req.logOut(req.user, err => {
         if(err) return next(err);
         res.redirect('/signin');
