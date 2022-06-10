@@ -2,6 +2,12 @@ const express = require('express');
 const morgan = require('morgan');
 const exphbs = require('express-handlebars');
 const path = require('path');
+const flash = require('connect-flash');
+const session = require('express-session');
+const MySQLstore = require('express-mysql-session');
+const databse = require('./keys');
+const { database } = require('./keys');
+
 
 //inicializacion
 const app = express();
@@ -20,13 +26,24 @@ app.engine('.hbs', hbs.engine);
 app.set('view engine', '.hbs');
 
 //midlewares
+app.use(session({
+    secret: 'luisgtzwebapilnlstore',
+    resave: false,
+    saveUninitialized: false,
+    store: new MySQLstore(database)
+
+}));
+app.use(flash());
 app.use(morgan('dev'));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
+
 //variables globales
 app.use((req, res, next) => {
+    app.locals.exito = req.flash('exito');
     next();
+
 });
 
 //rutas

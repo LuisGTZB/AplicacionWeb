@@ -17,6 +17,7 @@ router.post('/add', async(req, res) => {
         price
     };
     await pool.query('INSERT INTO products set ?', [newProduct]);
+    req.flash('exito', 'Producto almacenado correctamente');
     res.redirect('/products');
 });
 
@@ -30,6 +31,7 @@ router.get('/delete/:id', async(req, res) => {
     const { id } = req.params;
     await pool.query('DELETE FROM products WHERE ID = ?', [id]);
     //console.log(req.params.id)
+    req.flash('exito', 'Producto eliminado correctamente');
     res.redirect('/products')
 });
 
@@ -37,6 +39,7 @@ router.get('/edit/:id', async(req, res) => {
     const { id } = req.params;
     const product = await pool.query('SELECT * FROM products WHERE ID = ?', [id]);
     //console.log(product[0])
+    
     res.render('products/edit', {product: product[0]});
 });
 
@@ -50,6 +53,7 @@ router.post('/edit/:id', async(req, res) => {
     };
     console.log(newProduct);
     await pool.query('UPDATE products set ? WHERE id = ?', [newProduct, id]);
+    req.flash('exito', 'Producto actualizado correctamente');
     res.redirect('/products')
     res.send('updated')
 
